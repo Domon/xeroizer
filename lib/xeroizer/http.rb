@@ -127,21 +127,26 @@ module Xeroizer
         end
       end
        
-      def handle_oauth_error!(response)
+    def handle_oauth_error!(response)
         error_details = CGI.parse(response.plain_body)
         description   = error_details["oauth_problem_advice"].first
-      
+
         # see http://oauth.pbworks.com/ProblemReporting
         # In addition to token_expired and token_rejected, Xero also returns
         # 'rate limit exceeded' when more than 60 requests have been made in
         # a second.
         case (error_details["oauth_problem"].first)
-          when "token_expired"        then raise OAuth::TokenExpired.new(description)
-          when "token_rejected"       then raise OAuth::TokenInvalid.new(description)
-          when "rate limit exceeded"  then raise OAuth::RateLimitExceeded.new(description)
-          else raise OAuth::UnknownError.new(error_details["oauth_problem"].first + ':' + description)
+          when "token_expired"                then raise OAuth::TokenExpired.new(description)
+          when "token_rejected"               then raise OAuth::TokenInvalid.new(description)
+          when "rate limit exceeded"          then raise OAuth::RateLimitExceeded.new(description)
+          when error_details["oauth_problem"] then raise OAuth::UnknownError.new(error_details["oauth_problem"].first + ':' + description)
+          else 
+            Rails.logger.info(error_details["oauth_problem"].first)
+            #raise OAuth::UnknownError.new("Xero API may be down or the way OAuth errors are provided by Xero may have chaged.")
+       
         end
       end
+
       
       def handle_error!(response, request_body)
         
