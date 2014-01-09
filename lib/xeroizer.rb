@@ -71,6 +71,8 @@ require 'xeroizer/models/payroll/employee'
 
 require 'xeroizer/models/payroll/super_fund'
 require 'xeroizer/models/payroll/payroll_calendar'
+require 'xeroizer/models/payroll/payslip'
+require 'xeroizer/models/payroll/pay_run'
 
 require 'xeroizer/models/payroll/earnings_rate'
 require 'xeroizer/models/payroll/deduction_type'

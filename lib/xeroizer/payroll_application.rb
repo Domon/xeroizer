@@ -22,6 +22,7 @@ module Xeroizer
     record :SuperFund
     record :PayItems
     record :PayrollCalendar
+    record :PayRun
     
     def initialize(application)
       @application = application
